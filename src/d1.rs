@@ -1,3 +1,3 @@
-pub fn print_d1_answers() {
+pub fn print_d1() {
     todo!()
 }
