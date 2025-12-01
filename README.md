@@ -3,7 +3,7 @@
 My solutions for AoC 2025. _Please note that puzzle inputs are user-specific._
 
 ```shell
-cargo test -- --show-output
+cargo test --release -- --show-output
 ```
 
 - [x] [Day 1: Secret Entrance](src/1.rs)
