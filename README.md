@@ -7,7 +7,7 @@ cargo test -- --show-output
 ```
 
 - [x] [Day 1: Secret Entrance](src/1.rs)
-- [ ] 2
+- [ ] [Day 2](src/2.rs)
 - [ ] 3
 - [ ] 4
 - [ ] 5
