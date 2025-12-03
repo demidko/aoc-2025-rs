@@ -16,9 +16,9 @@ fn day_3_lobby_part_two() {
     println!("{}", include_str!("../3/input").lines().map(|s| (0..12)
         .fold((s, 0u64), |(slice, acc), i| slice
             .char_indices()
-            .take(slice.len() - (11 - i))
+            .take(slice.len() + i - 11)
             .min_by_key(|&(_, c)| Reverse(c))
-            .map(|(idx, ch)| (&slice[idx + 1..], acc * 10 + (ch as u64 & 0xF)))
+            .map(|(idx, c)| (&slice[idx + 1..], acc * 10 + (c as u64 & 0xF)))
             .unwrap()).1
     ).sum::<u64>());
 }
