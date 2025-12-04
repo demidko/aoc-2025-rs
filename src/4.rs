@@ -23,38 +23,31 @@ fn day_4_printing_department() {
 
 #[test]
 fn day_4_printing_department_part_two() {
-    println!(
-        "{}",
-        std::iter::successors(
-            Some((
-                include_str!("../4/input").as_bytes().to_vec(),
-                include_str!("../4/input").find('\n').unwrap() as isize + 1
-            )),
-            |(grid, w)| std::iter::once(
-                grid.iter()
-                    .enumerate()
-                    .map(|(i, &c)| {
-                        if c == b'@' && [
-                    -w-1, -w, -w+1,
-                    -1,       1,
-                    *w-1, *w, *w+1
-                ]
-                    .iter()
-                    .filter(|&&o| matches!(i as isize + o,
-                    n if n >= 0 && n < grid.len() as isize && grid[n as usize] == b'@'
-                ))
-                    .count() < 4 { b'.' } else { c }
-                    })
-                    .collect::<Vec<_>>()
-            )
-            .filter(|next| next != grid)
-            .map(|next| (next, *w))
-            .next()
-        )
-        .map(|(g, _)| g.iter().filter(|&&c| c == b'@').count())
-        .fold(None, |acc, count| acc
-            .map(|(first, _)| (first, count))
-            .or(Some((count, count))))
-        .map_or(0, |(first, last)| first - last)
-    );
+    use std::iter::successors;
+
+    let input = include_str!("../4/input");
+    let width = input.find('\n').unwrap() as isize + 1;
+    let limit = input.len() as isize;
+    let offsets = [-width - 1, -width, -width + 1, -1, 1, width - 1, width, width + 1];
+
+    let is_active = |grid: &[u8], idx: isize|
+        idx >= 0 && idx < limit && grid[idx as usize] == b'@';
+    let count_neighbors = |grid: &[u8], idx: usize|
+        offsets.iter().map(|&o| idx as isize + o).filter(|&pos| is_active(grid, pos)).count();
+    let transform_cell = |grid: &Vec<u8>, i: usize, c: u8|
+        (c == b'@' && count_neighbors(grid, i) < 4).then_some(b'.').unwrap_or(c);
+    let transform_grid = |grid: &Vec<u8>|
+        grid.iter().enumerate().map(|(i, &c)| transform_cell(grid, i, c)).collect::<Vec<_>>();
+    let evolve = |grid: &Vec<u8>|
+        Some(transform_grid(grid)).filter(|next| next != grid);
+    let count_paper = |grid: &Vec<u8>|
+        grid.iter().filter(|&&c| c == b'@').count();
+    let update_bounds = |acc: Option<(usize, usize)>, c|
+        acc.map(|(f, _)| (f, c)).or(Some((c, c)));
+
+    let history = successors(Some(input.as_bytes().to_vec()), evolve);
+    let stats = history.map(|g| count_paper(&g));
+    let (start, end) = stats.fold(None, update_bounds).unwrap_or((0, 0));
+
+    println!("{}", start - end);
 }
