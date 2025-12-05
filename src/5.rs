@@ -24,7 +24,6 @@ fn day_5_cafeteria_part_two() {
     use std::iter::once;
     use std::ops::RangeInclusive;
     type Range = RangeInclusive<u64>;
-
     let (ranges_txt, _) = include_str!("../5/input").split_once("\n\n").unwrap();
     let is_connected = |prev: &Range, next: &Range| *next.start() <= *prev.end() + 1;
     let calc_union = |prev: &Range, next: &Range| *prev.start()..=max(*prev.end(), *next.end());
@@ -41,6 +40,5 @@ fn day_5_cafeteria_part_two() {
     let parse_line = |s: &str| s.split_once('-').map(|(a, b)| a.parse::<u64>().unwrap()..=b.parse::<u64>().unwrap()).unwrap();
     let calc_len = |r: &Range| r.end() - *r.start() + 1;
     let total = ranges_txt.lines().map(parse_line).fold(Vec::new(), insert_ordered).into_iter().fold(Vec::new(), merge_step).iter().map(calc_len).sum::<u64>();
-
     println!("{}", total);
 }
