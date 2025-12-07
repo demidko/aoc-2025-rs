@@ -12,7 +12,7 @@ cargo test --release -- --show-output
 - [x] [Day 4: Printing Department](src/4.rs)
 - [x] [Day 5: Cafeteria](src/5.rs)
 - [x] [Day 6: Trash Compactor](src/6.rs)
-- [ ] [Day 7: ?](src/7.rs)
+- [x] [Day 7: Laboratories](src/7.rs)
 - [ ] [Day 8: ?](src/8.rs)
 - [ ] [Day 9: ?](src/9.rs)
 - [ ] [Day 10: ?](src/10.rs)
